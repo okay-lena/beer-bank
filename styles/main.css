@@ -1,0 +1,45 @@
+body {
+    background-color: #eee;
+    font-family: 'Montserrat';
+}
+
+header {
+    background-color: orange;
+    color: #fff;
+    padding-bottom: 30px;
+    text-align: center;
+}
+
+header h1 {
+    margin-top: 0;
+}
+
+#searchBar {
+    padding: 5px;
+    width: 300px;
+}
+
+.topnav {
+    background-color: orange;
+    overflow: hidden;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    width: auto;
+}
+
+.topnav a {
+    float: right;
+    display: block;
+    color: #fff;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.content {
+    margin-left: auto;
+    margin-right: auto;
+    width: 850px;
+}
