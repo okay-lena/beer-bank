@@ -12,6 +12,7 @@ header {
 
 header h1 {
     margin-top: 0;
+    text-align: center;
 }
 
 #searchBar {
@@ -19,16 +20,20 @@ header h1 {
     width: 300px;
 }
 
-.topnav {
+/* .topnav {
     background-color: orange;
     overflow: hidden;
     position: -webkit-sticky;
     position: sticky;
     top: 0;
     width: auto;
+} */
+
+.sticky-top {
+    overflow: hidden;
 }
 
-.topnav a {
+.sticky-top a {
     float: right;
     display: block;
     color: #fff;
@@ -38,8 +43,158 @@ header h1 {
     font-size: 17px;
 }
 
-.content {
+.container {
     margin-left: auto;
     margin-right: auto;
     width: 850px;
+}
+
+.beerInResults {
+    background-color: white;
+    border-radius: 5px;
+    display: inline-block;
+    float: left;
+    margin: 10px;
+    width: 230px;
+    height: 250px;
+    padding: 15px 10px;
+    text-align: center;
+}
+
+.star {
+    float: right;
+}
+
+.beerImg {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.beerImgSpan {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.beerName {
+    color: orange;
+    display: block;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.beerTagline {
+    color: #999;
+    font-size: 0.8em;
+}
+
+/* modal window */
+#beerModal {
+    color: #777;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+#beerImage {
+    text-align: center;
+}
+
+.details-beer-image {
+    max-width: 100%;
+    max-height: 500px;
+}
+
+.details-beer-name {
+    color: orange;
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.details-tagline {
+    color: #999;
+    display: block;
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+.line {
+    border-top: 5px solid #B33E9A;
+    display: block;
+    margin-bottom: 20px;
+    width: 100px;
+}
+
+.ibu {
+    display: inline-block;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+.abv {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.ebc {
+    display: inline-block;
+}
+
+.description {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.best-served {
+    display: block;
+}
+
+.beer-similar {
+    margin-top: 20px;
+}
+
+.similarBeersHeader {
+    color: orange;
+}
+
+/* media queries */
+@media (min-width: 1200px) {
+    .container {
+        margin-left: auto;
+        margin-right: auto;
+        width: 850px;
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        margin-left: auto;
+        margin-right: auto;
+        width: 850px;
+    }
+}
+
+@media (max-width: 815px) {
+    .container {
+        margin-left: auto;
+        margin-right: auto;
+        width: 785px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-left: auto;
+        margin-right: auto;
+        width: 550px;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        margin-left: auto;
+        margin-right: auto;
+        width: 270px;
+    }
 }
