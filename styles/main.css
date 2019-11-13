@@ -61,8 +61,16 @@ header h1 {
     text-align: center;
 }
 
+.beerID {
+    display: none;
+}
+
 .star {
     float: right;
+}
+
+.fas {
+    color: orange;
 }
 
 .beerImg {
