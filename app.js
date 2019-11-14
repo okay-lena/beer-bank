@@ -123,6 +123,8 @@ function showBeerDetails() {
         foodPairingSection.appendChild(liFood);
     }
 
+    showRandomBeers(3);
+
     // initialize and open modal
     $('#beerModal').modal({backdrop: true, keyboard: true, show: true});
 
@@ -214,4 +216,74 @@ function showFavoriteBeers(e) {
         }
     }
 
+}
+
+function showRandomBeers(numberOfBeers) {
+    let randomBeer = {};
+    let randomBeerHtmlOutput = "";
+
+    for (i = 0; i < numberOfBeers; i++) {
+        // generate random beer object
+        randomBeer = beerList[Math.floor(Math.random() * beerList.length)];
+
+        // build random beer html
+        randomBeerHtmlOutput += `
+        <div class="randomBeerInDetails">
+            <span class="randomBeerID">${randomBeer.id}</span>
+            <span class="randomBeerImgSpan"><img src="${randomBeer.image_url}" alt="${randomBeer.name}" class=randomBeerImg></span>
+            <span class="randomBeerName">${randomBeer.name}</span>
+        </div>
+        `;
+    }
+
+    // insert random beers to UI
+    document.querySelector("#randomBeers").innerHTML = randomBeerHtmlOutput;
+
+    // add addEventListeners to each randomBeer to show beer details
+    const randomBeers = Array.from(document.querySelectorAll(".randomBeerInDetails"));
+    for (beer of randomBeers) {
+        beer.addEventListener("click", showRandomBeerDetails);
+    }
+}
+
+function showRandomBeerDetails() {
+    // define which beer was clicked
+    let selectedBeerID = this.children[0].innerText;
+
+    // get selected beer object from all beers
+    selectedBeer = beerList[selectedBeerID-1];
+
+    // get modal UI and populate modal window with selected beer details
+    // image
+    document.getElementById("beerImage").innerHTML = `
+        <img src="${selectedBeer.image_url}" class="details-beer-image">
+    `;
+
+    // details
+    document.getElementById("beerDetails").innerHTML = `
+        <span class="details-beer-name">${selectedBeer.name}</span>
+        <span class="details-tagline">${selectedBeer.tagline}</span>
+        <span class="line"></span>
+        <span class="ibu"><b>IBU:</b> ${selectedBeer.ibu}</span>
+        <span class="abv"><b>ABV:</b> ${selectedBeer.abv}</span>
+        <span class="ebc"><b>EBC:</b> ${selectedBeer.ebc}</span>
+        <span class="description">${selectedBeer.description}</span>
+        <span class="best-served"><b>Best served with:</b></span>
+        <ul class="food-pairing"></ul>
+    `;
+
+    // dynamically populate food pairing
+    const foodPairing = selectedBeer.food_pairing; // all pairing food
+    const foodPairingSection = document.querySelector(".food-pairing");
+
+    for (food of foodPairing) {
+        const liFood = document.createElement("li");
+        liFood.appendChild(document.createTextNode(food));
+        foodPairingSection.appendChild(liFood);
+    }
+
+    showRandomBeers(3);
+
+    // initialize and open modal
+    $('#beerModal').modal({backdrop: true, keyboard: true, show: true});
 }
