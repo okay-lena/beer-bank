@@ -1,10 +1,12 @@
 var beerList = "";
 var selectedBeer = {};
 var favoriteBeers = [];
+const searchBar = document.getElementById("searchBar");
 
 document.addEventListener("DOMContentLoaded", getAllBeers);
 document.getElementById("homeLink").addEventListener("click", showAllBeers);
 document.getElementById("favoritesLink").addEventListener("click", showFavoriteBeers);
+searchBar.addEventListener("keyup", searchBeers);
 
 function getAllBeers() {
     const xhr = new XMLHttpRequest();
@@ -69,6 +71,29 @@ function getAllBeers() {
 
     // we don't want to show beers yet
     document.querySelector(".beers").style.display = "none";
+}
+
+function searchBeers() {
+    // hide all individual beers but display beers div
+    document.querySelector(".beers").removeAttribute("style");
+    const allBeers = document.querySelectorAll(".beerInResults");
+    for (beer of allBeers) {
+        beer.style.display = "none";
+    }
+
+    // get string input from search
+    let beerToFind = searchBar.value.toLowerCase();
+
+    // make search of input string for each beer
+    allBeers.forEach(function (beer) {
+        for (span of beer.children) {
+            if ( span.className === "beerName" && span.innerText.toLowerCase().includes(beerToFind) ) {
+                // show beers matching string
+                beer.removeAttribute("style");
+            }
+            // if beer doesn't exist - show notice // todo later
+        }
+    });
 }
 
 function showAllBeers(e) {
