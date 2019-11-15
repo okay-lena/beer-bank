@@ -41,8 +41,10 @@ function getAllBeers() {
                 }
                 beerHtml += buildBeerHtmlInResults(beer, beerStarClass);
             });
+
             insertBeersToDOM(beerHtml);
         }
+
         addEventListenersToShowBeerDetailsAndChangeFavoriteStatus();
     }
 
@@ -82,8 +84,8 @@ function addEventListenersToShowBeerDetailsAndChangeFavoriteStatus() {
 }
 
 function searchBeers() {
-    // hide all individual beers but display beers div
-    document.querySelector(".beers").removeAttribute("style");
+    displayBeersDiv();
+    // hide all individual beers
     const allBeers = document.querySelectorAll(".beerInResults");
     for (beer of allBeers) {
         beer.style.display = "none";
@@ -104,10 +106,14 @@ function searchBeers() {
     });
 }
 
+function displayBeersDiv() {
+    document.querySelector(".beers").removeAttribute("style");
+}
+
 function showAllBeers(e) {
     e.preventDefault();
     getAllBeers();
-    document.querySelector(".beers").removeAttribute("style");
+    displayBeersDiv();
 }
 
 function showBeerDetails() {
@@ -127,6 +133,17 @@ function showBeerDetails() {
         }
     }
 
+    buildBeerHtmlDetails(beer);
+    showRandomBeers(3);
+    openBeerModal();
+}
+
+function openBeerModal() {
+    // initialize and open modal
+    $('#beerModal').modal({backdrop: true, keyboard: true, show: true});
+}
+
+function buildBeerHtmlDetails(beer) {
     // get modal UI and populate modal window with selected beer details
     // image
     document.getElementById("beerImage").innerHTML = `
@@ -155,12 +172,6 @@ function showBeerDetails() {
         liFood.appendChild(document.createTextNode(food));
         foodPairingSection.appendChild(liFood);
     }
-
-    showRandomBeers(3);
-
-    // initialize and open modal
-    $('#beerModal').modal({backdrop: true, keyboard: true, show: true});
-
 }
 
 function changeBeerFavoriteStatus(event) {
@@ -214,8 +225,7 @@ function changeBeerFavoriteStatus(event) {
 function showFavoriteBeers(e) {
     e.preventDefault();
 
-    // show beers
-    document.querySelector(".beers").removeAttribute("style");
+    displayBeersDiv();
 
     if (localStorage.getItem("favoriteBeers")) {
         let beerHtml = "";
@@ -228,8 +238,6 @@ function showFavoriteBeers(e) {
         }
 
         insertBeersToDOM(beerHtml);
-
-        // add addEventListeners to show details and star icon
         addEventListenersToShowBeerDetailsAndChangeFavoriteStatus();
     }
 
@@ -258,37 +266,7 @@ function showRandomBeerDetails() {
     // get selected beer object from all beers
     selectedBeer = beerList[selectedBeerID-1];
 
-    // get modal UI and populate modal window with selected beer details
-    // image
-    document.getElementById("beerImage").innerHTML = `
-        <img src="${selectedBeer.image_url}" class="details-beer-image">
-    `;
-
-    // details
-    document.getElementById("beerDetails").innerHTML = `
-        <span class="details-beer-name">${selectedBeer.name}</span>
-        <span class="details-tagline">${selectedBeer.tagline}</span>
-        <span class="line"></span>
-        <span class="ibu"><b>IBU:</b> ${selectedBeer.ibu}</span>
-        <span class="abv"><b>ABV:</b> ${selectedBeer.abv}</span>
-        <span class="ebc"><b>EBC:</b> ${selectedBeer.ebc}</span>
-        <span class="description">${selectedBeer.description}</span>
-        <span class="best-served"><b>Best served with:</b></span>
-        <ul class="food-pairing"></ul>
-    `;
-
-    // dynamically populate food pairing
-    const foodPairing = selectedBeer.food_pairing; // all pairing food
-    const foodPairingSection = document.querySelector(".food-pairing");
-
-    for (food of foodPairing) {
-        const liFood = document.createElement("li");
-        liFood.appendChild(document.createTextNode(food));
-        foodPairingSection.appendChild(liFood);
-    }
-
+    buildBeerHtmlDetails(selectedBeer);
     showRandomBeers(3);
-
-    // initialize and open modal
-    $('#beerModal').modal({backdrop: true, keyboard: true, show: true});
+    openBeerModal();
 }
