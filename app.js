@@ -17,7 +17,7 @@ function getAllBeers() {
         if (this.status === 200) {
             beerList = JSON.parse(this.responseText);
 
-            let beerHtmlOutput = "";
+            let beerHtml = "";
             let beerStarClass = "";
 
             beerList.forEach(function (beer) {
@@ -39,38 +39,46 @@ function getAllBeers() {
                         }
                     }
                 }
-                beerHtmlOutput += `
-                <div class="beerInResults">
-                    <span class="beerID">${beer.id}</span>
-                    <span class="star"><i class="${beerStarClass}"></i></span>
-                    <span class="beerImgSpan"><img src="${beer.image_url}" alt="${beer.name}" class=beerImg></span>
-                    <span class="beerName">${beer.name}</span>
-                    <span class="beerTagline">${beer.tagline}</span>
-                </div>
-                `;
+                beerHtml += buildBeerHtmlInResults(beer, beerStarClass);
             });
-
-            // insert beers to ui
-            document.querySelector(".beers").innerHTML = beerHtmlOutput;
-
+            insertBeersToDOM(beerHtml);
         }
-
-        const beers = Array.from(document.querySelectorAll(".beerInResults"));
-        for (beer of beers) {
-            beer.addEventListener("click", showBeerDetails);
-            for (span of beer.children) {
-                if (span.className === "star") {
-                    span.addEventListener("click", changeBeerFavoriteStatus);
-                }
-            }
-        }
-
+        addEventListenersToShowBeerDetailsAndChangeFavoriteStatus();
     }
 
     xhr.send();
 
     // we don't want to show beers yet
     document.querySelector(".beers").style.display = "none";
+}
+
+function insertBeersToDOM(beersHtml) {
+    document.querySelector(".beers").innerHTML = beersHtml;
+}
+
+function buildBeerHtmlInResults(beer, beerStarClass) {
+    let beerHtml = `
+    <div class="beerInResults">
+        <span class="beerID">${beer.id}</span>
+        <span class="star"><i class="${beerStarClass}"></i></span>
+        <span class="beerImgSpan"><img src="${beer.image_url}" alt="${beer.name}" class=beerImg></span>
+        <span class="beerName">${beer.name}</span>
+        <span class="beerTagline">${beer.tagline}</span>
+    </div>
+    `;
+    return beerHtml;
+}
+
+function addEventListenersToShowBeerDetailsAndChangeFavoriteStatus() {
+    const beers = Array.from(document.querySelectorAll(".beerInResults"));
+    for (beer of beers) {
+        beer.addEventListener("click", showBeerDetails);
+        for (span of beer.children) {
+            if (span.className === "star") {
+                span.addEventListener("click", changeBeerFavoriteStatus);
+            }
+        }
+    }
 }
 
 function searchBeers() {
@@ -210,65 +218,37 @@ function showFavoriteBeers(e) {
     document.querySelector(".beers").removeAttribute("style");
 
     if (localStorage.getItem("favoriteBeers")) {
-        let favBeerHtmlOutput = "";
+        let beerHtml = "";
+        let beerStarClass = "fas fa-star";
 
         // get favoriteBeers
         favoriteBeers = JSON.parse(localStorage.getItem("favoriteBeers"));
         for (favBeer of favoriteBeers) {
-            favBeerHtmlOutput += `
-            <div class="beerInResults">
-                <span class="beerID">${favBeer.id}</span>
-                <span class="star"><i class="fas fa-star"></i></span>
-                <span class="beerImgSpan"><img src="${favBeer.image_url}" alt="${favBeer.name}" class=beerImg></span>
-                <span class="beerName">${favBeer.name}</span>
-                <span class="beerTagline">${favBeer.tagline}</span>
-            </div>
-            `;
+            beerHtml += buildBeerHtmlInResults(favBeer, beerStarClass);
         }
 
-        // insert beers to ui
-        document.querySelector(".beers").innerHTML = favBeerHtmlOutput;
+        insertBeersToDOM(beerHtml);
 
         // add addEventListeners to show details and star icon
-        const beers = Array.from(document.querySelectorAll(".beerInResults"));
-        for (beer of beers) {
-            beer.addEventListener("click", showBeerDetails);
-            for (span of beer.children) {
-                if (span.className === "star") {
-                    span.addEventListener("click", changeBeerFavoriteStatus);
-                }
-            }
-        }
+        addEventListenersToShowBeerDetailsAndChangeFavoriteStatus();
     }
 
 }
 
 function showRandomBeers(numberOfBeers) {
-    let randomBeer = {};
-    let randomBeerHtmlOutput = "";
+    let beer = {};
+    let beerHtml = "";
 
     for (i = 0; i < numberOfBeers; i++) {
         // generate random beer object
-        randomBeer = beerList[Math.floor(Math.random() * beerList.length)];
-
-        // build random beer html
-        randomBeerHtmlOutput += `
-        <div class="randomBeerInDetails">
-            <span class="randomBeerID">${randomBeer.id}</span>
-            <span class="randomBeerImgSpan"><img src="${randomBeer.image_url}" alt="${randomBeer.name}" class=randomBeerImg></span>
-            <span class="randomBeerName">${randomBeer.name}</span>
-        </div>
-        `;
+        beer = beerList[Math.floor(Math.random() * beerList.length)];
+        beerHtml += buildBeerHtmlInResults(beer, "");
     }
 
-    // insert random beers to UI
-    document.querySelector("#randomBeers").innerHTML = randomBeerHtmlOutput;
+    // insert random beers to DOM
+    document.querySelector("#randomBeers").innerHTML = beerHtml;
 
-    // add addEventListeners to each randomBeer to show beer details
-    const randomBeers = Array.from(document.querySelectorAll(".randomBeerInDetails"));
-    for (beer of randomBeers) {
-        beer.addEventListener("click", showRandomBeerDetails);
-    }
+    addEventListenersToShowBeerDetailsAndChangeFavoriteStatus();
 }
 
 function showRandomBeerDetails() {
