@@ -1,12 +1,15 @@
-var beerList = "";
-var selectedBeer = {};
-var favoriteBeers = [];
+let beerList = "";
+let selectedBeer = {};
+let favoriteBeers = [];
 const searchBar = document.getElementById("searchBar");
 
 document.addEventListener("DOMContentLoaded", getAllBeers);
 document.getElementById("homeLink").addEventListener("click", showAllBeers);
 document.getElementById("favoritesLink").addEventListener("click", showFavoriteBeers);
-searchBar.addEventListener("keyup", searchBeers);
+if (searchBar) {
+        searchBar.addEventListener("keyup", instantBeerSearch);
+}
+document.getElementById("advancedSearch").addEventListener("submit", searchBeers);
 
 function getAllBeers() {
     const xhr = new XMLHttpRequest();
@@ -83,7 +86,7 @@ function addEventListenersToShowBeerDetailsAndChangeFavoriteStatus() {
     }
 }
 
-function searchBeers() {
+function instantBeerSearch() {
     displayBeersDiv();
     // hide all individual beers
     const allBeers = document.querySelectorAll(".beerInResults");
@@ -104,6 +107,45 @@ function searchBeers() {
             // if beer doesn't exist - show notice // todo later
         }
     });
+}
+
+function searchBeers(e) {
+    e.preventDefault();
+    displayBeersDiv();
+    // hide all individual beers
+    const allBeers = document.querySelectorAll(".beerInResults");
+    for (beerItem of allBeers) {
+        beerItem.style.display = "none";
+    }
+
+    let matchingBeerId = 0;
+
+    // get all inputs from search
+    const minIbu = document.getElementById("minIbu").value;
+    const maxIbu = document.getElementById("maxIbu").value;
+    const minAbv = document.getElementById("minAbv").value;
+    const maxAbv = document.getElementById("maxAbv").value;
+    const minEbc = document.getElementById("minEbc").value;
+    const maxEbc = document.getElementById("maxEbc").value;
+
+    // find matching beers
+    for (beer of beerList) {
+        if ( (beer.ibu >= minIbu && beer.ibu <= maxIbu) &&
+            (beer.abv >= minAbv && beer.abv <= maxAbv) &&
+            (beer.ebc >= minEbc && beer.ebc <= maxEbc) ) {
+            matchingBeerId = beer.id;
+
+            allBeers.forEach(function (beerItem){
+                for (span of beerItem.children) {
+                    if ( span.className === "beerID" && span.innerText == matchingBeerId ) {
+                        // show matching beer
+                        beerItem.removeAttribute("style");
+                    }
+                    // if beer doesn't exist - show notice // todo later
+                }
+            });
+        }
+    }
 }
 
 function displayBeersDiv() {
