@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <script src="https://kit.fontawesome.com/8a775c83c8.js" crossorigin="anonymous"></script>
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="./styles/main.css">
+        <title>The Beer Bank</title>
+    </head>
+    <body>
+        <header>
+            <div class="sticky-top">
+                <a href="./index.html" id="homeLink">Home</a>
+                <a href="./favorites.html" id="favoritesLink">Favorites</a>
+            </div>
+            <h1>The Beer Bank</h1>
+            <p>Find your favorite beer here</p>
+            <form class="advancedSearch" id="advancedSearch">
+                <span class="searchIbu">
+                    <input type="number" placeholder="Min IBU" name="minIbu" id="minIbu"  autofocus>
+                    <input type="number" placeholder="Max IBU" name="maxIbu" id="maxIbu">
+                </span>
+                <span class="searchAbv">
+                    <input type="number" placeholder="Min ABV" name="minAbv" id="minAbv">
+                    <input type="number" placeholder="Max ABV" name="maxAbv" id="maxAbv">
+                </span>
+                <span class="searchEbc">
+                    <input type="number" placeholder="Min EBC" name="minEbc" id="minEbc">
+                    <input type="number" placeholder="Max EBC" name="maxEbc" id="maxEbc">
+                </span>
+                <span class="searchBrewedDate">
+                    <label for="brewedFrom">Brewed from</label>
+                    <input type="date" name="brewedFrom" id="brewedFrom">
+                    <label for="brewedTo">to</label>
+                    <input type="date" name="brewedTo" id="brewedTo">
+                </span>
+                <span class="searchBtn">
+                <input class="btn btn-primary btn-sm" type="submit" value="Submit" id="searchBtn">
+                </span>
+            </form>
+        </header>
+        <div class="container">
+            <div class="beers"></div>
+        </div>
+        <!-- modal window for beer details -->
+        <div class="modal fade" id="beerModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- modal content -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body" id="beerModal">
+                        <div class="container-fluid">
+                            <div class="row beer-info">
+                                <div class="col-4" id="beerImage"></div>
+                                <div class="col-8" id="beerDetails"></div>
+                            </div>
+                            <div class="row">
+                                <span class="randomBeersHeader"><h2>You might also like:</h2></span>
+                            </div>
+                            <div class="row beer-random">
+                                <div class="col randomBeersList" id="randomBeers"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="app.js"></script>
+    </body>
+</html>
