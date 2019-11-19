@@ -120,15 +120,43 @@ function searchBeers(e) {
 
     let matchingBeerId = 0;
 
-    // get all inputs from search
-    const minIbu = document.getElementById("minIbu").value;
-    const maxIbu = document.getElementById("maxIbu").value;
-    const minAbv = document.getElementById("minAbv").value;
-    const maxAbv = document.getElementById("maxAbv").value;
-    const minEbc = document.getElementById("minEbc").value;
-    const maxEbc = document.getElementById("maxEbc").value;
-    const brewedFrom = Date.parse(document.getElementById("brewedFrom").value);
-    const brewedTo = Date.parse(document.getElementById("brewedTo").value);
+    // get all inputs from search and set default if empty
+    let minIbu = document.getElementById("minIbu").value;
+    if (minIbu === "") {
+        minIbu = 0;
+    }
+    let maxIbu = document.getElementById("maxIbu").value;
+    if (maxIbu === "") {
+        maxIbu = 100;
+    }
+    let minAbv = document.getElementById("minAbv").value;
+    if (minAbv === "") {
+        minAbv = 0;
+    }
+    let maxAbv = document.getElementById("maxAbv").value;
+    if (maxAbv === "") {
+        maxAbv = 100;
+    }
+    let minEbc = document.getElementById("minEbc").value;
+    if (minEbc === "") {
+        minEbc = 0;
+    }
+    let maxEbc = document.getElementById("maxEbc").value;
+    if (maxEbc === "") {
+        maxEbc = 100;
+    }
+    let brewedFrom = document.getElementById("brewedFrom").value;
+    if (brewedFrom === "") {
+        brewedFrom = Date.parse("01/01/1970");
+    } else {
+        brewedFrom = Date.parse(brewedFrom);
+    }
+    let brewedTo = document.getElementById("brewedTo").value;
+    if (brewedTo === "") {
+        brewedTo = Date.parse("01/01/2100");
+    } else {
+        brewedTo = Date.parse(brewedTo);
+    }
 
     // find matching beers
     for (beer of beerList) {
