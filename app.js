@@ -127,12 +127,18 @@ function searchBeers(e) {
     const maxAbv = document.getElementById("maxAbv").value;
     const minEbc = document.getElementById("minEbc").value;
     const maxEbc = document.getElementById("maxEbc").value;
+    const brewedFrom = Date.parse(document.getElementById("brewedFrom").value);
+    const brewedTo = Date.parse(document.getElementById("brewedTo").value);
 
     // find matching beers
     for (beer of beerList) {
-        if ( (beer.ibu >= minIbu && beer.ibu <= maxIbu) &&
+        beer.first_brewed = Date.parse("01/" + beer.first_brewed);
+        if (
+            (beer.ibu >= minIbu && beer.ibu <= maxIbu) &&
             (beer.abv >= minAbv && beer.abv <= maxAbv) &&
-            (beer.ebc >= minEbc && beer.ebc <= maxEbc) ) {
+            (beer.ebc >= minEbc && beer.ebc <= maxEbc) &&
+            (beer.first_brewed >= brewedFrom && beer.first_brewed <= brewedTo)
+            ) {
             matchingBeerId = beer.id;
 
             allBeers.forEach(function (beerItem){
