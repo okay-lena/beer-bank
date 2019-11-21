@@ -4,6 +4,7 @@ let favoriteBeers = [];
 const searchBar = document.getElementById("searchBar");
 const beersDiv = document.getElementById("beers");
 var beerItemToStartLoading;
+var favoritesPage = false;
 
 document.addEventListener("DOMContentLoaded", getAllBeersFromAPI);
 document.getElementById("homeLink").addEventListener("click", showAllBeers);
@@ -189,6 +190,10 @@ function searchBeers(e) {
 
 function showAllBeers(e) {
     e.preventDefault();
+
+    // to prevent displaying favoritesPage instead of Home
+    favoritesPage = false;
+
     let beerHtml = getAllBeersHtml(beerList, "", "");
     insertBeersToDOM(beerHtml);
     addEventListenersToShowBeerDetailsAndChangeFavoriteStatus();
@@ -272,7 +277,7 @@ function buildBeerHtmlDetails(beer) {
     }
 }
 
-function changeBeerFavoriteStatus(event) {
+function changeBeerFavoriteStatus(e) {
     let beerToChangeFavStatus = {};
     let beerIDToChangeFavStatus = "";
 
@@ -309,6 +314,10 @@ function changeBeerFavoriteStatus(event) {
                 }
             });
             localStorage.setItem("favoriteBeers", JSON.stringify(favoriteBeers));
+            // reload favoriteBeers page
+            if (favoritesPage) {
+                showFavoriteBeers(e);
+            }
         } else {
             beerList[beerIDToChangeFavStatus-1].isFavorite = true;
             // add beer to localStorage
@@ -317,7 +326,7 @@ function changeBeerFavoriteStatus(event) {
             this.firstChild.className = "fas fa-star";
         }
     }
-    event.stopPropagation();
+    e.stopPropagation();
 }
 
 function showFavoriteBeers(e) {
@@ -334,6 +343,7 @@ function showFavoriteBeers(e) {
         }
 
         insertBeersToDOM(beerHtml);
+        favoritesPage = true;
         addEventListenersToShowBeerDetailsAndChangeFavoriteStatus();
     }
 }
