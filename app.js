@@ -2,8 +2,10 @@ let beerList = "";
 let selectedBeer = {};
 let favoriteBeers = [];
 const searchBar = document.getElementById("searchBar");
+const beersDiv = document.getElementById("beers");
+var beerItemToStartLoading;
 
-document.addEventListener("DOMContentLoaded", getAllBeers);
+document.addEventListener("DOMContentLoaded", getAllBeersFromAPI);
 document.getElementById("homeLink").addEventListener("click", showAllBeers);
 document.getElementById("favoritesLink").addEventListener("click", showFavoriteBeers);
 if (searchBar) {
@@ -11,7 +13,7 @@ if (searchBar) {
 }
 document.getElementById("advancedSearch").addEventListener("submit", searchBeers);
 
-function getAllBeers() {
+function getAllBeersFromAPI() {
     const xhr = new XMLHttpRequest();
 
     xhr.open("GET", `https://api.punkapi.com/v2/beers`, true);
@@ -23,38 +25,49 @@ function getAllBeers() {
             let beerHtml = "";
             let beerStarClass = "";
 
-            beerList.forEach(function (beer) {
-                // check if favorite in localStorage
-                if (localStorage.getItem("favoriteBeers") === null) {
-                    favoriteBeers = [];
-                    beer.isFavorite = false;
-                    beerStarClass = "far fa-star";
-                } else {
-                    favoriteBeers = JSON.parse(localStorage.getItem("favoriteBeers"));
-                    for (favBeer of favoriteBeers) {
-                        if (favBeer.id === beer.id) {
-                            beer.isFavorite = true;
-                            beerStarClass = "fas fa-star";
-                            break;
-                        } else {
-                            beer.isFavorite = false;
-                            beerStarClass = "far fa-star";
-                        }
-                    }
-                }
-                beerHtml += buildBeerHtmlInResults(beer, beerStarClass);
-            });
-
+            beerHtml = getAllBeersHtml(beerList, beerStarClass, beerHtml);
             insertBeersToDOM(beerHtml);
+            // we don't want to show beers yet
+            hideAllBeerCards();
         }
 
         addEventListenersToShowBeerDetailsAndChangeFavoriteStatus();
     }
 
     xhr.send();
+}
 
-    // we don't want to show beers yet
-    document.querySelector(".beers").style.display = "none";
+function getAllBeersHtml(beerList, beerStarClass, beerHtml) {
+    beerList.forEach(function (beer) {
+        // check if favorite in localStorage
+        if (localStorage.getItem("favoriteBeers") === null) {
+            favoriteBeers = [];
+            beer.isFavorite = false;
+            beerStarClass = "far fa-star";
+        } else {
+            favoriteBeers = JSON.parse(localStorage.getItem("favoriteBeers"));
+            for (favBeer of favoriteBeers) {
+                if (favBeer.id === beer.id) {
+                    beer.isFavorite = true;
+                    beerStarClass = "fas fa-star";
+                    break;
+                } else {
+                    beer.isFavorite = false;
+                    beerStarClass = "far fa-star";
+                }
+            }
+        }
+        beerHtml += buildBeerHtmlInResults(beer, beerStarClass);
+    });
+    return beerHtml;
+}
+
+function hideAllBeerCards() {
+    // hide all individual beers
+    const allBeers = document.querySelectorAll(".beerInResults");
+    for (beerItem of allBeers) {
+        beerItem.style.display = "none";
+    }
 }
 
 function insertBeersToDOM(beersHtml) {
@@ -87,12 +100,8 @@ function addEventListenersToShowBeerDetailsAndChangeFavoriteStatus() {
 }
 
 function instantBeerSearch() {
-    displayBeersDiv();
-    // hide all individual beers
+    hideAllBeerCards();
     const allBeers = document.querySelectorAll(".beerInResults");
-    for (beer of allBeers) {
-        beer.style.display = "none";
-    }
 
     // get string input from search
     let beerToFind = searchBar.value.toLowerCase();
@@ -111,12 +120,8 @@ function instantBeerSearch() {
 
 function searchBeers(e) {
     e.preventDefault();
-    displayBeersDiv();
-    // hide all individual beers
+    hideAllBeerCards();
     const allBeers = document.querySelectorAll(".beerInResults");
-    for (beerItem of allBeers) {
-        beerItem.style.display = "none";
-    }
 
     let matchingBeerId = 0;
 
@@ -182,14 +187,31 @@ function searchBeers(e) {
     }
 }
 
-function displayBeersDiv() {
-    document.querySelector(".beers").removeAttribute("style");
-}
-
 function showAllBeers(e) {
     e.preventDefault();
-    getAllBeers();
-    displayBeersDiv();
+    let beerHtml = getAllBeersHtml(beerList, "", "");
+    insertBeersToDOM(beerHtml);
+    addEventListenersToShowBeerDetailsAndChangeFavoriteStatus();
+    hideAllBeerCards();
+
+    beerItemToStartLoading = 0;
+    let beerItemToContinueLoading = loadMoreBeers(beerItemToStartLoading);
+    beersDiv.addEventListener('scroll', function() {
+        if (beersDiv.scrollTop + beersDiv.clientHeight >= beersDiv.scrollHeight) {
+            beerItemToContinueLoading = loadMoreBeers(beerItemToContinueLoading);
+        }
+    });
+}
+
+function loadMoreBeers(beerItemToStartLoading) {
+    const allBeers = document.querySelectorAll(".beerInResults");
+    for (beerItem = beerItemToStartLoading; beerItem < beerItemToStartLoading+9; beerItem++) {
+        if (allBeers[beerItem]) {
+            allBeers[beerItem].removeAttribute("style");
+        }
+    }
+    beerItemToStartLoading = beerItemToStartLoading + 9;
+    return beerItemToStartLoading;
 }
 
 function showBeerDetails() {
@@ -301,8 +323,6 @@ function changeBeerFavoriteStatus(event) {
 function showFavoriteBeers(e) {
     e.preventDefault();
 
-    displayBeersDiv();
-
     if (localStorage.getItem("favoriteBeers")) {
         let beerHtml = "";
         let beerStarClass = "fas fa-star";
@@ -316,7 +336,6 @@ function showFavoriteBeers(e) {
         insertBeersToDOM(beerHtml);
         addEventListenersToShowBeerDetailsAndChangeFavoriteStatus();
     }
-
 }
 
 function showRandomBeers(numberOfBeers) {

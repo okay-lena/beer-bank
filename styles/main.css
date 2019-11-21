@@ -77,6 +77,12 @@ header h1 {
     width: 850px;
 }
 
+/* to support infinite scroll */
+.beers {
+    height: 700px;
+    overflow: auto;
+}
+
 .beerInResults {
     background-color: white;
     border-radius: 5px;
