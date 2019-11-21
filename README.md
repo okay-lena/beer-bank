@@ -1,2 +1,5 @@
-# beer-bank
-The Beer Bank
+# The Beer Bank App
+
+## Built With
+* Vanilla JS
+* Bootstrap
