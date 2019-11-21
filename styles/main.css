@@ -49,6 +49,19 @@ header h1 {
     display: block;
 }
 
+.instantSearchLink {
+    margin-top: 20px;
+    display: none;
+}
+
+.instantSearchLink a {
+    color: #fff;
+}
+
+.advancedSearch {
+    display: none;
+}
+
 .advancedSearchLink a {
     color: white;
     text-decoration: underline;

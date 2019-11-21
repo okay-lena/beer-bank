@@ -12,6 +12,8 @@ document.getElementById("favoritesLink").addEventListener("click", showFavoriteB
 if (searchBar) {
         searchBar.addEventListener("keyup", instantBeerSearch);
 }
+document.getElementById("advancedSearchLink").addEventListener("click", showAdvancedSearchAndHideInstantSearch);
+document.getElementById("instantSearchLink").addEventListener("click", showInstantSearchAndHideAdvancedSearch);
 document.getElementById("advancedSearch").addEventListener("submit", searchBeers);
 
 function getAllBeersFromAPI() {
@@ -101,7 +103,11 @@ function addEventListenersToShowBeerDetailsAndChangeFavoriteStatus() {
 }
 
 function instantBeerSearch() {
+    let beerHtml = getAllBeersHtml(beerList, "", "");
+    insertBeersToDOM(beerHtml);
+    addEventListenersToShowBeerDetailsAndChangeFavoriteStatus();
     hideAllBeerCards();
+
     const allBeers = document.querySelectorAll(".beerInResults");
 
     // get string input from search
@@ -119,8 +125,29 @@ function instantBeerSearch() {
     });
 }
 
+function showAdvancedSearchAndHideInstantSearch(e) {
+    e.preventDefault();
+    document.getElementById("instantSearch").style.display = "none";
+    document.getElementById("advancedSearchLink").style.display = "none";
+    document.getElementById("advancedSearch").style.display = "block";
+    document.getElementById("instantSearchLink").style.display = "block";
+}
+
+function showInstantSearchAndHideAdvancedSearch(e) {
+    e.preventDefault();
+    document.getElementById("instantSearch").removeAttribute("style");
+    document.getElementById("advancedSearchLink").removeAttribute("style");
+    document.getElementById("advancedSearch").style.display = "none";
+    document.getElementById("instantSearchLink").style.display = "none";
+}
+
 function searchBeers(e) {
     e.preventDefault();
+
+    let beerHtml = getAllBeersHtml(beerList, "", "");
+    insertBeersToDOM(beerHtml);
+    addEventListenersToShowBeerDetailsAndChangeFavoriteStatus();
+
     hideAllBeerCards();
     const allBeers = document.querySelectorAll(".beerInResults");
 
@@ -166,7 +193,9 @@ function searchBeers(e) {
 
     // find matching beers
     for (beer of beerList) {
-        beer.first_brewed = Date.parse("01/" + beer.first_brewed);
+        if ( !isNaN(Date.parse("01/" + beer.first_brewed)) ) {
+            beer.first_brewed = Date.parse("01/" + beer.first_brewed);
+        }
         if (
             (beer.ibu >= minIbu && beer.ibu <= maxIbu) &&
             (beer.abv >= minAbv && beer.abv <= maxAbv) &&
