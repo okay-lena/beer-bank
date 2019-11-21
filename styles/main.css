@@ -20,7 +20,7 @@ header h1 {
     width: 300px;
 }
 
-/* .topnav {
+/* .sticky-top {
     background-color: orange;
     overflow: hidden;
     position: -webkit-sticky;
@@ -30,6 +30,7 @@ header h1 {
 } */
 
 .sticky-top {
+    background-color: orange;
     overflow: hidden;
 }
 
